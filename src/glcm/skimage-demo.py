@@ -33,7 +33,7 @@ def calc_glcm_properties(rgb_image_dir, output_dir, distances, angles):
             csv_props_titles.extend([prop_title + '-' + str(i) + '-' + str(j) for prop_title in props_titles])
 
     # save titles to csv
-    with open(os.path.join(output_dir, 'glcm_properties.csv'), mode='wt') as csv_file:
+    with open(os.path.join(output_dir, 'glcm_properties.csv'), mode='wt', newline='') as csv_file:
         csv_writer = csv.writer(csv_file, delimiter=',')
         csv_writer.writerow(csv_props_titles)
 
@@ -74,7 +74,7 @@ def calc_glcm_properties(rgb_image_dir, output_dir, distances, angles):
         props = numpy.array(props)
 
         # save properties to csv
-        with open(os.path.join(output_dir, 'glcm_properties.csv'), mode='at') as csv_file:
+        with open(os.path.join(output_dir, 'glcm_properties.csv'), mode='at', newline='') as csv_file:
             csv_writer = csv.writer(csv_file, delimiter=',')
             props = props.transpose([1, 2, 0])
             props = props.reshape([-1])
