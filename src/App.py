@@ -16,14 +16,24 @@ def merge_all_props(labels, all_props):
     return merged_props
 
 
+def merge_all_titles(label_titles, all_prop_titles):
+    merged_prop_titles = []
+    merged_prop_titles.extend(label_titles)
+    for prop_titles in all_prop_titles:
+        merged_prop_titles.extend(prop_titles)
+    return merged_prop_titles
+
+
 def get_label_props(labels_path):
     label_props = {}
+    label_titles = []
     with open(labels_path, 'rt') as labels_file:
         csv_reader = csv.reader(labels_file, delimiter=',')
-        csv_reader = list(csv_reader)
-        for row in csv_reader[1:]:
+        rows = list(csv_reader)
+        label_titles = rows[0][1:]
+        for row in rows[1:]:
             label_props[row[0]] = row[1:]
-    return label_props
+    return label_props, label_titles
 
 
 def output2csv(props, titles, filepath):
@@ -41,14 +51,15 @@ def start():
                                                         output_dir='./../resources/output/net',
                                                         distances=[1, 2],
                                                         angles=[0, numpy.pi / 4.0])
-    output2csv(glcm_props,glcm_prop_titles,'./../resources/output/net/glcm_props.csv')
+    output2csv(glcm_props, glcm_prop_titles, './../resources/output/net/glcm_props.csv')
     # 2:
     # 3:
     # 4: 获取labels属性。
-    label_props = get_label_props(labels_path='./../resources/input/net/labels/labels.csv')
+    label_props, label_titles = get_label_props(labels_path='./../resources/input/net/labels/labels.csv')
     # 5: 合并所有特征。
     all_props = merge_all_props(labels=label_props, all_props=[glcm_props])
-    print(all_props)
+    all_titles = merge_all_titles(label_titles=label_titles, all_prop_titles=[glcm_prop_titles])
+    output2csv(all_props, all_titles, './../resources/output/net/all_props.csv')
 
 
 if __name__ == '__main__':
