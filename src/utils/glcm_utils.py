@@ -25,20 +25,18 @@ def calc_glcm_properties(rgb_image_dir, output_dir, distances, angles):
     if isinstance(angles, int):
         angles = [angles]
 
-    props_titles = ['contrast', 'dissimilarity', 'homogeneity', 'ASM', 'energy', 'correlation']
+    basic_prop_titles = ['contrast', 'dissimilarity', 'homogeneity', 'ASM', 'energy', 'correlation']
 
-    csv_props_titles = []
+    glcm_prop_titles = []
     for i in range(len(distances)):
         for j in range(len(angles)):
-            csv_props_titles.extend([prop_title + '-' + str(i) + '-' + str(j) for prop_title in props_titles])
+            glcm_prop_titles.extend(
+                [basic_prop_title + '-' + str(i) + '-' + str(j) for basic_prop_title in basic_prop_titles])
 
-    # save titles to csv
-    with open(os.path.join(output_dir, 'glcm_properties.csv'), mode='wt', newline='') as csv_file:
-        csv_writer = csv.writer(csv_file, delimiter=',')
-        csv_writer.writerow(csv_props_titles)
-
+    glcm_props = {}
     rgb_image_names = os.listdir(rgb_image_dir)
     for rgb_image_name in rgb_image_names:
+        id = rgb_image_name.split('.')[0]
         rgb_image_path = os.path.join(rgb_image_dir, rgb_image_name)
 
         # convert rgb image to gray image, and save to output dir.
@@ -68,22 +66,22 @@ def calc_glcm_properties(rgb_image_dir, output_dir, distances, angles):
         # print('energy:', '\r\n', energy, '\r\n')
         # print('correlation:', '\r\n', correlation, '\r\n')
 
-        props = [None] * len(props_titles)
-        for i in range(len(props_titles)):
-            props[i] = skimage.feature.greycoprops(P=p, prop=props_titles[i])
-        props = numpy.array(props)
+        glcm_props[id] = [None] * len(basic_prop_titles)
 
-        # save properties to csv
-        with open(os.path.join(output_dir, 'glcm_properties.csv'), mode='at', newline='') as csv_file:
-            csv_writer = csv.writer(csv_file, delimiter=',')
-            props = props.transpose([1, 2, 0])
-            props = props.reshape([-1])
-            csv_writer.writerow(props)
+        for i in range(len(basic_prop_titles)):
+            glcm_props[id][i] = skimage.feature.greycoprops(P=p, prop=basic_prop_titles[i])
+
+        glcm_props[id] = numpy.array(glcm_props[id])
+        glcm_props[id] = glcm_props[id].transpose([1, 2, 0])
+        glcm_props[id] = glcm_props[id].reshape([-1])
+
+    return glcm_props, glcm_prop_titles
 
 
 if __name__ == '__main__':
-    testset_dir = './../../resources/datasets/testset'
-calc_glcm_properties(rgb_image_dir=testset_dir,
-                     output_dir='./../../resources/output/datasets/testset',
-                     distances=[1, 2],
-                     angles=[0, numpy.pi / 4.0])
+    testset_dir = './../../resources/input/testset'
+    glcm_props = calc_glcm_properties(rgb_image_dir=testset_dir,
+                                      output_dir='./../../resources/output/testset',
+                                      distances=[1, 2],
+                                      angles=[0, numpy.pi / 4.0])
+    print(glcm_props)
