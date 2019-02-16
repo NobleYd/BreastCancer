@@ -1,0 +1,25 @@
+当前的score如下
+cnn
+    1.0
+svm
+    1.0
+gaussian_nb
+    0.692
+multinomial_nb
+    0.62
+bernouli_nb
+    0.6
+adaboost
+    1.0
+bagging
+    0.996-1.0
+random_forest
+    1.0
+
+classifier.adaboost_classifier.score= 1.0
+classifier.bagging_classifier.score= 0.996
+classifier.bernoulli_nb_classifier.score= 0.6
+classifier.gaussian_nb_classifier.score= 0.692
+classifier.multinomial_nb_classifier.score= 0.62
+classifier.random_forest_classifier.score= 1.0
+classifier.svm_classifier.score= 1.0

@@ -1,0 +1,2 @@
+汇总图表
+    knn，svm，decision，bayes gaussian，Voting集成。

@@ -1,11 +1,10 @@
+# -*- coding: utf-8 -*-
+
 import skimage.io
 import skimage.color
 import skimage.feature
 
 import numpy
-
-import csv
-
 import os
 import os.path
 
@@ -79,9 +78,9 @@ def calc_glcm_properties(rgb_image_dir, output_dir, distances, angles):
 
 
 if __name__ == '__main__':
-    testset_dir = './../../resources/input/testset'
-    glcm_props = calc_glcm_properties(rgb_image_dir=testset_dir,
-                                      output_dir='./../../resources/output/testset',
+    test_images_dir = './../../resources/input/test/images'
+    glcm_props = calc_glcm_properties(rgb_image_dir=test_images_dir,
+                                      output_dir='./../../resources/output/test',
                                       distances=[1, 2],
                                       angles=[0, numpy.pi / 4.0])
     print(glcm_props)
